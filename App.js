@@ -5,6 +5,7 @@ import { store } from "./src/store";
 import HomeScreen from "./src/screens/HomeScreen";
 import { View, Text, Button } from "react-native";
 import AnthropometryScreen from "./src/screens/AnthropometryScreen";
+import DailyScreen from "./src/screens/DailyScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -29,6 +30,7 @@ export default function App() {
         >
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Details" component={DetailsScreen} />
+          <Stack.Screen name="Daily" component={DailyScreen} />
           <Stack.Screen
             name="Anthropometry"
             component={AnthropometryScreen}

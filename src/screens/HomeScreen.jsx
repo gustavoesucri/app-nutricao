@@ -20,6 +20,13 @@ export default function HomeScreen({ navigation }) {
         title="Ir para Avaliação Física"
         onPress={() => navigation.navigate("Anthropometry")}
       />
+
+      <View style={{ height: 12 }} />
+
+      <Button
+        title="Ir para Diário de Nutrição"
+        onPress={() => navigation.navigate("Daily")}
+      />
     </View>
   );
 }
