@@ -104,11 +104,25 @@ export default function AnthropometryScreen({ navigation }) {
                       render={({ field: { onChange, value } }) => (
                         <TextInput
                           style={styles.inputSmall}
-                          onChangeText={onChange}
-                          value={value}
-                          // placeholder=""
                           keyboardType="numeric"
                           editable={name !== "bmi"} // IMC só leitura
+                          value={value}
+                          onChangeText={(text) => {
+                            // permite apenas números e vírgula/ponto
+                            let formatted = text.replace(/[^0-9.,]/g, "");
+
+                            // substitui ponto por vírgula
+                            formatted = formatted.replace(",", ".");
+
+                            // impede mais de uma vírgula
+                            const parts = formatted.split(".");
+                            if (parts.length > 2) formatted = parts[0] + "." + parts[1];
+
+                            // limita 3 antes e 2 depois da vírgula
+                            formatted = formatted.replace(/^(\d{0,3})(\.\d{0,2})?.*$/, "$1$2");
+
+                            onChange(formatted);
+                          }}
                         />
                       )}
                     />
