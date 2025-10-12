@@ -48,3 +48,16 @@ export async function fetchAnthropometryFromServer(userId = 1) {
     return [];
   }
 }
+
+const API_URL = "http://localhost:3001/anthropometry";
+
+export const fetchAnthropometry = async () => {
+  const response = await axios.get(API_URL);
+  return response.data;
+};
+
+export const postAnthropometry = async (data) => {
+  const response = await axios.post(API_URL, data);
+  return response.data;
+};
+
