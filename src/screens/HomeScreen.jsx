@@ -1,8 +1,15 @@
 import { View, Text, Button, StyleSheet } from "react-native";
+import Header from "../components/Header";
+import HomeButton from "../components/HomeButton";
 
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
+      <Header title="Início" navigation={navigation} />
+      <View style={styles.card}>
+        <HomeButton iconSource={require("../../assets/metric.png")} onPress={() => {}} />
+
+      </View>
 
       <Text style={styles.title}>🏠 Home</Text>
       <Text style={styles.subtitle}>Bem-vindo ao app!</Text>
@@ -27,9 +34,7 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f8f9fa",
+    backgroundColor: "orange"
   },
   title: {
     fontSize: 28,
@@ -40,5 +45,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#555",
     marginBottom: 20,
+  },
+   card: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 20,
+    margin: 20,
   },
 });
