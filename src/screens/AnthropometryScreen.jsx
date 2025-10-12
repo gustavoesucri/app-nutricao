@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
 import { useForm, Controller, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import { setAnthropometry } from "../store/anthropometrySlice";
 import Header from "../components/Header";
 import OrangeButton from "../components/OrangeButton";
+import { saveAnthropometryLocal, syncAnthropometryWithServer } from "../api/anthropometryApi";
+import { loadAnthropometryLocal } from "../api/anthropometryApi";
 
 const schema = z.object({
   neck: z.string().optional(),
@@ -46,8 +48,29 @@ export default function AnthropometryScreen({ navigation }) {
     }
   }, [height, weight]);
 
-  const onSubmit = (data) => {
-    dispatch(setAnthropometry(data));
+  useEffect(() => {
+    (async () => {
+      const saved = await loadAnthropometryLocal();
+      if (saved) {
+        Object.entries(saved).forEach(([key, value]) => setValue(key, value));
+      }
+    })();
+  }, []);
+
+  const onSubmit = async (data) => {
+    try {
+      await saveAnthropometryLocal(data);
+      dispatch(setAnthropometry(data));
+
+      const synced = await syncAnthropometryWithServer();
+      if (synced) {
+        console.log("Dados enviados para servidor com sucesso!");
+      } else {
+        console.log("Sem conexão. Dados mantidos localmente.");
+      }
+    } catch (err) {
+      console.error("Erro ao salvar avaliação:", err);
+    }
   };
 
   const sections = [
@@ -140,66 +163,66 @@ export default function AnthropometryScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: "orange" 
+  container: {
+    flex: 1,
+    backgroundColor: "orange"
   },
 
-  scroll: { 
-    padding: 20 
+  scroll: {
+    padding: 20
   },
 
-  card: { 
-    backgroundColor: "#fff", 
-    borderRadius: 10, 
-    padding: 20 
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 20
   },
 
-  sectionTitle: { 
-    fontSize: 16, 
-    fontWeight: "bold", 
-    marginTop: 16, 
-    marginBottom: 8 
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 16,
+    marginBottom: 8
   },
 
-  fieldRow: { 
-    flexDirection: "row", 
-    justifyContent: "space-between", 
-    alignItems: "center", 
-    marginBottom: 10 
+  fieldRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10
   },
 
-  label: { 
+  label: {
     paddingLeft: 20,
-    fontSize: 14, 
-    color: "#333", 
-    flex: 1 
+    fontSize: 14,
+    color: "#333",
+    flex: 1
   },
 
-  inputGroup: { 
-    flexDirection: "row", 
-    alignItems: "center", 
-    justifyContent: "flex-end", 
-    minWidth: 100 
+  inputGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    minWidth: 100
   },
 
-  inputSmall: { 
-    width: 80, 
-    height: 40, 
-    borderWidth: 1, 
-    borderColor: "#ccc", 
-    borderRadius: 6, 
-    paddingHorizontal: 8, 
-    textAlign: "center", 
-    backgroundColor: "#fff" 
+  inputSmall: {
+    width: 80,
+    height: 40,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    textAlign: "center",
+    backgroundColor: "#fff"
   },
 
-  unit: { 
-    width: 24, 
-    textAlign: "left", 
-    fontSize: 14, 
-    color: "#333", 
-    marginLeft: 5 
+  unit: {
+    width: 24,
+    textAlign: "left",
+    fontSize: 14,
+    color: "#333",
+    marginLeft: 5
   },
 });
 

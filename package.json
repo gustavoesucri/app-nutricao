@@ -7,13 +7,16 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "api": "json-server --watch db.json --port 3001"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-navigation/native": "^7.1.18",
     "@react-navigation/native-stack": "^7.3.27",
     "@reduxjs/toolkit": "^2.9.0",
+    "axios": "^1.12.2",
     "expo": "~54.0.12",
     "expo-status-bar": "~3.0.8",
     "react": "19.1.0",
@@ -30,7 +33,8 @@
   "devDependencies": {
     "@babel/preset-flow": "^7.27.1",
     "@babel/preset-react": "^7.27.1",
-    "@react-native-community/cli": "latest"
+    "@react-native-community/cli": "latest",
+    "json-server": "^1.0.0-beta.3"
   },
   "private": true
 }
