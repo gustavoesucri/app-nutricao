@@ -2,10 +2,13 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Appbar } from 'react-native-paper';
 
 export default function Header({ title, navigation }) {
+
+  const isHome = title === "Início"; // identifica se é a Home
+
   return (
     <View style={styles.container}>
       {/* Botão esquerdo de voltar */}
-      {navigation ? (
+      {!isHome && navigation ? ( // só mostra se não for Home
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.iconButton}
