@@ -1,9 +1,11 @@
 import { View, Text, Button, StyleSheet, ScrollView } from "react-native";
 import Header from "../components/Header";
 import HomeButton from "../components/HomeButton";
+import Footer from "../components/Footer";
 
 export default function HomeScreen({ navigation }) {
   return (
+    <>
     <View style={styles.container}>
       <Header title="Início" navigation={navigation} />
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -75,6 +77,8 @@ export default function HomeScreen({ navigation }) {
         />
       </ScrollView>
     </View>
+    <Footer navigation={navigation} />
+    </>
   );
 }
 
@@ -105,6 +109,6 @@ const styles = StyleSheet.create({
     paddingBottom: 11,
   },
   scroll: {
-    paddingBottom: 20,
+    paddingBottom: 80,
   },
 });
