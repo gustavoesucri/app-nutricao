@@ -1,25 +1,27 @@
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, ScrollView } from "react-native";
 import Header from "../components/Header";
 import HomeButton from "../components/HomeButton";
-// import { ScrollView } from "react-native-web";
-import { ScrollView } from "react-native";
 
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Header title="Início" navigation={navigation} />
-       <ScrollView contentContainerStyle={styles.scroll}>
-      <View style={styles.card}>
-        <View style={styles.row}>
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <View style={styles.card}>
+          <View style={styles.row}>
             <HomeButton
               iconSource={require("../../assets/fork-knife.png")}
               onPress={() => {}}
               imageSize={0.78}
+              imageOffsetX={0}
+              imageOffsetY={0}
             />
             <HomeButton
               iconSource={require("../../assets/sup.png")}
               onPress={() => {}}
               imageSize={0.9}
+              imageOffsetX={0}
+              imageOffsetY={0}
             />
           </View>
           <View style={styles.row}>
@@ -27,43 +29,57 @@ export default function HomeScreen({ navigation }) {
               iconSource={require("../../assets/metric.png")}
               onPress={() => {}}
               imageSize={0.87}
+              imageOffsetX={0}
+              imageOffsetY={0}
             />
             <HomeButton
               iconSource={require("../../assets/workout.png")}
               onPress={() => {}}
               imageSize={0.92}
+              imageOffsetX={0}
+              imageOffsetY={0}
             />
           </View>
           <View style={styles.row}>
             <HomeButton
               iconSource={require("../../assets/cart.png")}
               onPress={() => {}}
-              imageSize={0.8}
+              imageSize={0.825}
+              imageOffsetX={-18}
+              imageOffsetY={0}
+              paddingLeft={10}
             />
             <HomeButton
               iconSource={require("../../assets/gift.png")}
               onPress={() => {}}
               imageSize={1.39}
-            />
-          </View>
+              imageOffsetX={0}
+              imageOffsetY={0}
+              />
+              </View>
         </View>
 
-      <Text style={styles.title}>🏠 Home</Text>
-      <Text style={styles.subtitle}>Bem-vindo ao app!</Text>
-      <Text style={styles.subtitle}>OBS: Nesta tela deverá ter os botões que levam às outras telas.</Text>
-      <Text style={styles.subtitle}>Exemplo: O botão azul Avaliação Física será um botão grande com imagem/ícone somente. Assim como todos os outros.</Text>
+        <Text style={styles.title}>🏠 Home</Text>
+        <Text style={styles.subtitle}>Bem-vindo ao app!</Text>
+        <Text style={styles.subtitle}>
+          OBS: Nesta tela deverá ter os botões que levam às outras telas.
+        </Text>
+        <Text style={styles.subtitle}>
+          Exemplo: O botão azul Avaliação Física será um botão grande com
+          imagem/ícone somente. Assim como todos os outros.
+        </Text>
 
-      <Button
-        title="Ir para detalhes"
-        onPress={() => navigation.navigate("Details")}
-      />
+        <Button
+          title="Ir para detalhes"
+          onPress={() => navigation.navigate("Details")}
+        />
 
-      <View style={{ height: 12 }} />
+        <View style={{ height: 12 }} />
 
-      <Button
-        title="Ir para Avaliação Física"
-        onPress={() => navigation.navigate("Anthropometry")}
-      />
+        <Button
+          title="Ir para Avaliação Física"
+          onPress={() => navigation.navigate("Anthropometry")}
+        />
       </ScrollView>
     </View>
   );
@@ -72,7 +88,7 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "orange"
+    backgroundColor: "orange",
   },
   title: {
     fontSize: 28,
@@ -84,7 +100,7 @@ const styles = StyleSheet.create({
     color: "#555",
     marginBottom: 20,
   },
-   card: {
+  card: {
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 20,
@@ -93,6 +109,9 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    paddingBottom: 11
+    paddingBottom: 11,
+  },
+  scroll: {
+    paddingBottom: 20,
   },
 });
