@@ -48,10 +48,14 @@ const styles = StyleSheet.create({
     elevation: 3, // sombra no Android
   },
   title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#000",
-  },
+  position: "absolute",
+  left: 0,
+  right: 0,
+  textAlign: "center",
+  fontSize: 18,
+  fontWeight: "bold",
+  color: "#000",
+},
   iconButton: {
     padding: 5,
   },
