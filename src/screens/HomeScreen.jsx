@@ -61,13 +61,6 @@ export default function HomeScreen({ navigation }) {
 
         <Text style={styles.title}>🏠 Home</Text>
         <Text style={styles.subtitle}>Bem-vindo ao app!</Text>
-        <Text style={styles.subtitle}>
-          OBS: Nesta tela deverá ter os botões que levam às outras telas.
-        </Text>
-        <Text style={styles.subtitle}>
-          Exemplo: O botão azul Avaliação Física será um botão grande com
-          imagem/ícone somente. Assim como todos os outros.
-        </Text>
 
         <Button
           title="Ir para detalhes"
