@@ -11,18 +11,42 @@ export default function HomeScreen({ navigation }) {
        <ScrollView contentContainerStyle={styles.scroll}>
       <View style={styles.card}>
         <View style={styles.row}>
-        <HomeButton iconSource={require("../../assets/fork-knife.png")} onPress={() => {}} />
-        <HomeButton iconSource={require("../../assets/sup.png")} onPress={() => {}} />
+            <HomeButton
+              iconSource={require("../../assets/fork-knife.png")}
+              onPress={() => {}}
+              imageSize={0.78}
+            />
+            <HomeButton
+              iconSource={require("../../assets/sup.png")}
+              onPress={() => {}}
+              imageSize={0.9}
+            />
+          </View>
+          <View style={styles.row}>
+            <HomeButton
+              iconSource={require("../../assets/metric.png")}
+              onPress={() => {}}
+              imageSize={0.87}
+            />
+            <HomeButton
+              iconSource={require("../../assets/workout.png")}
+              onPress={() => {}}
+              imageSize={0.92}
+            />
+          </View>
+          <View style={styles.row}>
+            <HomeButton
+              iconSource={require("../../assets/cart.png")}
+              onPress={() => {}}
+              imageSize={0.8}
+            />
+            <HomeButton
+              iconSource={require("../../assets/gift.png")}
+              onPress={() => {}}
+              imageSize={1.39}
+            />
+          </View>
         </View>
-        <View style={styles.row}>
-        <HomeButton iconSource={require("../../assets/metric.png")} onPress={() => {}} />
-        <HomeButton iconSource={require("../../assets/workout.png")} onPress={() => {}} />
-        </View>
-        <View style={styles.row}>
-        <HomeButton iconSource={require("../../assets/cart.png")} onPress={() => {}} />
-        <HomeButton iconSource={require("../../assets/gift.png")} onPress={() => {}} />
-        </View>
-      </View>
 
       <Text style={styles.title}>🏠 Home</Text>
       <Text style={styles.subtitle}>Bem-vindo ao app!</Text>
@@ -68,6 +92,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
-    justifyContent: "space-evenly"
+    justifyContent: "space-evenly",
+    paddingBottom: 11
   },
 });
