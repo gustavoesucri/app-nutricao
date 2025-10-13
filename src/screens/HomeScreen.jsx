@@ -1,14 +1,27 @@
 import { View, Text, Button, StyleSheet } from "react-native";
 import Header from "../components/Header";
 import HomeButton from "../components/HomeButton";
+// import { ScrollView } from "react-native-web";
+import { ScrollView } from "react-native";
 
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Header title="Início" navigation={navigation} />
+       <ScrollView contentContainerStyle={styles.scroll}>
       <View style={styles.card}>
+        <View style={styles.row}>
+        <HomeButton iconSource={require("../../assets/fork-knife.png")} onPress={() => {}} />
+        <HomeButton iconSource={require("../../assets/sup.png")} onPress={() => {}} />
+        </View>
+        <View style={styles.row}>
         <HomeButton iconSource={require("../../assets/metric.png")} onPress={() => {}} />
-
+        <HomeButton iconSource={require("../../assets/workout.png")} onPress={() => {}} />
+        </View>
+        <View style={styles.row}>
+        <HomeButton iconSource={require("../../assets/cart.png")} onPress={() => {}} />
+        <HomeButton iconSource={require("../../assets/gift.png")} onPress={() => {}} />
+        </View>
       </View>
 
       <Text style={styles.title}>🏠 Home</Text>
@@ -27,6 +40,7 @@ export default function HomeScreen({ navigation }) {
         title="Ir para Avaliação Física"
         onPress={() => navigation.navigate("Anthropometry")}
       />
+      </ScrollView>
     </View>
   );
 }
@@ -51,5 +65,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     margin: 20,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-evenly"
   },
 });
