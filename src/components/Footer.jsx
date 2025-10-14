@@ -18,7 +18,7 @@ export default function Footer({ navigation }) {
   ];
 
   const imageSizes = [1.2, 1.38, 1.38, 1.3, 1.98];
-  const imageOffsetsX = [0, 0, 0, 1, 0]; // o 0 garante que o burger fique no centro
+  const imageOffsetsX = [0, 0, 0, 1, 0];
   const imageOffsetsY = [0, 3, 0, 0, 0];
 
   return (
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   button: {
-    flex: 1, // garante que cada botão ocupe espaço igual
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
