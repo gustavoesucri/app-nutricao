@@ -9,6 +9,7 @@ import Header from "../components/Header";
 import OrangeButton from "../components/OrangeButton";
 import { saveAnthropometryLocal, syncAnthropometryWithServer } from "../api/anthropometryApi";
 import { loadAnthropometryLocal } from "../api/anthropometryApi";
+import Footer from "../components/Footer";
 
 const schema = z.object({
   neck: z.string().optional(),
@@ -158,6 +159,7 @@ export default function AnthropometryScreen({ navigation }) {
           <OrangeButton title="Salvar Avaliação" onPress={handleSubmit(onSubmit)} />
         </View>
       </ScrollView>
+      <Footer navigation={navigation} />
     </View>
   );
 }
@@ -169,7 +171,8 @@ const styles = StyleSheet.create({
   },
 
   scroll: {
-    padding: 20
+    padding: 20,
+    paddingBottom: 80
   },
 
   card: {
