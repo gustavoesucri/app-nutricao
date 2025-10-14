@@ -1,7 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod"; // ✅ Import necessário
 import {
   setHumor,
   setDificuldade,
@@ -9,19 +11,43 @@ import {
   setImagem,
 } from "../store/dailySlice";
 import MoodButton from "../components/MoodButton";
-import OrangeButton from "../components/OrangeButton"; // Importando o novo componente
+import OrangeButton from "../components/OrangeButton";
 import Header from "../components/Header";
-import { Alert } from "react-native";
 import { ScrollView } from "react-native-web";
+import Footer from "../components/Footer";
 
-export default function DailyScreen() {
+// ✅ Schema de validação
+const dailySchema = z.object({
+  humor: z.enum(["Ruim", "Bom", "Excelente"], {
+    required_error: "Selecione o humor na refeição",
+  }),
+  dificuldade: z.boolean({
+    required_error: "Informe se teve dificuldade na refeição",
+  }),
+  Dificuldade: z
+    .string()
+    .min(3, "Descreva brevemente sua dificuldade")
+    .optional(),
+  desejo: z.boolean({
+    required_error: "Informe se teve desejo por alimentos específicos",
+  }),
+  imagem: z.string().optional(),
+});
+
+export default function DailyScreen({ navigation }) {
   const dispatch = useDispatch();
   const { humor, dificuldade, desejo, imagem } = useSelector((state) => state.diario);
   const storedData = useSelector((state) => state.anthropometry);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
-    resolver: zodResolver(anthropometrySchema),
-    defaultValues: storedData,
+    resolver: zodResolver(dailySchema),
+    defaultValues: {
+      humor,
+      dificuldade,
+      desejo,
+      Dificuldade: "",
+      imagem,
+    },
   });
 
   const handleImageUpload = async () => {
@@ -34,66 +60,93 @@ export default function DailyScreen() {
     }
   };
 
-  const onSubmit = () => {
+  const onSubmit = (data) => {
+    console.log("Dados validados:", data);
     Alert.alert("Diário salvo com sucesso!");
   };
 
   return (
     <View style={styles.container}>
-        <Header title="Diário de Nutrição" navigation={navigation} />
+      <Header title="Diário de Nutrição" navigation={navigation} />
 
-        <ScrollView contentContainerStyle={styles.scrollContent}>
-            <View style={styles.card}>
-                <Text style={styles.title}>Preencha o seu Diário de Nutrição</Text>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.card}>
+          <Text style={styles.title}>Preencha o seu Diário de Nutrição</Text>
 
-                <Text style={styles.label}>Humor na refeição</Text>
-                <View style={styles.row}>
-                    <MoodButton label="Ruim" active={humor === "Ruim"} onPress={() => dispatch(setHumor("Ruim"))} color="#F08080"/>
-                    <MoodButton label="Bom" active={humor === "Bom"} onPress={() => dispatch(setHumor("Bom"))} color="#FFD700"/>
-                    <MoodButton label="Excelente" active={humor === "Excelente"} onPress={() => dispatch(setHumor("Excelente"))} color="#4ADE80" />
-                </View>
-            
+          {/* Humor */}
+          <Text style={styles.label}>Humor na refeição</Text>
+          <View style={styles.row}>
+            <MoodButton label="Ruim" active={humor === "Ruim"} onPress={() => dispatch(setHumor("Ruim"))} color="#F08080" />
+            <MoodButton label="Bom" active={humor === "Bom"} onPress={() => dispatch(setHumor("Bom"))} color="#FFD700" />
+            <MoodButton label="Excelente" active={humor === "Excelente"} onPress={() => dispatch(setHumor("Excelente"))} color="#4ADE80" />
+          </View>
+          {errors.humor && <Text style={styles.error}>{errors.humor.message}</Text>}
 
-                <Text style={styles.label}>Teve dificuldade em alguma refeição?</Text>
-                <View style={styles.row}>
-                    <MoodButton label="Sim" active={dificuldade === true} onPress={() => dispatch(setDificuldade(true))}/>
-                    <MoodButton label="Não" active={dificuldade === false} onPress={() => dispatch(setDificuldade(false))} color="#F08080" />
-                </View>
+          {/* Dificuldade */}
+          <Text style={styles.label}>Teve dificuldade em alguma refeição?</Text>
+          <View style={styles.row}>
+            <MoodButton label="Sim" active={dificuldade === true} onPress={() => dispatch(setDificuldade(true))} />
+            <MoodButton label="Não" active={dificuldade === false} onPress={() => dispatch(setDificuldade(false))} color="#F08080" />
+          </View>
+          {errors.dificuldade && <Text style={styles.error}>{errors.dificuldade.message}</Text>}
 
-                <View style={styles.fieldContainer}>
-                <Controller
-                    control={control}
-                    name="Dificuldade"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                    <TextInput
-                        style={styles.input}
-                        onBlur={onBlur}
-                        onChangeText={onChange}
-                        value={value}
-                        placeholder={`Digite a sua dificuldade.`}
-                    />
-                    )}
-                />
-                </View>
-
-                <Text style={styles.label}>Desejo por alimentos específicos?</Text>
-                <View style={styles.row}>
-                    <MoodButton label="Sim" active={desejo === true} onPress={() => dispatch(setDesejo(true))}/>
-                    <MoodButton label="Não" active={desejo === false} onPress={() => dispatch(setDesejo(false))} color="#F08080" />
-                </View>
-            
-
-                {imagem && (
-                    <Image source={{ uri: imagem }} style={styles.image} />
+          {/* Campo texto */}
+          { dificuldade === true && (
+            <View style={styles.fieldContainer}>
+              <Controller
+                control={control}
+                name="Dificuldade"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={styles.input}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="Descreva a dificuldade (opcional)"
+                  />
                 )}
-
-                <TouchableOpacity style={styles.uploadBtn} onPress={handleImageUpload}>
-                    <Text style={styles.label}>Upload de imagem da refeição</Text>
-                </TouchableOpacity>
-
-                <OrangeButton title="Salvar Diário" onPress={handleSubmit(onSubmit)} />
+              />
+              {errors.Dificuldade && <Text style={styles.error}>{errors.Dificuldade.message}</Text>}
             </View>
-        </ScrollView>
+          )}
+          {/* Desejo */}
+          <Text style={styles.label}>Desejo por alimentos específicos?</Text>
+          <View style={styles.row}>
+            <MoodButton label="Sim" active={desejo === true} onPress={() => dispatch(setDesejo(true))} />
+            <MoodButton label="Não" active={desejo === false} onPress={() => dispatch(setDesejo(false))} color="#F08080" />
+          </View>
+          {errors.desejo && <Text style={styles.error}>{errors.desejo.message}</Text>}
+
+          {/* Campo texto */}
+          {desejo === true && (  
+            <View style={styles.fieldContainer}>
+              <Controller
+                control={control}
+                name="Desejo"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={styles.input}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="Quais alimentos teve desejo?"
+                  />
+                )}
+              />
+              {errors.Dificuldade && <Text style={styles.error}>{errors.Dificuldade.message}</Text>}
+            </View>
+          )}
+          {/* Imagem */}
+          {imagem && <Image source={{ uri: imagem }} style={styles.image} />}
+          <TouchableOpacity style={styles.uploadBtn} onPress={handleImageUpload}>
+            <Text style={styles.label}>Upload de imagem da refeição</Text>
+          </TouchableOpacity>
+
+          {/* Botão Salvar */}
+          <OrangeButton title="Salvar Diário" onPress={handleSubmit(onSubmit)} />
+        </View>
+      </ScrollView>
+      <Footer navigation={navigation} />
     </View>
   );
 }
@@ -112,7 +165,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "orange", // fundo da tela
+    backgroundColor: "orange",
   },
   scrollContent: {
     padding: 20,
