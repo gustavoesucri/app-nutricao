@@ -17,8 +17,12 @@ import { ScrollView } from "react-native-web";
 export default function DailyScreen() {
   const dispatch = useDispatch();
   const { humor, dificuldade, desejo, imagem } = useSelector((state) => state.diario);
+  const storedData = useSelector((state) => state.anthropometry);
 
-  const { handleSubmit } = useForm();
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(anthropometrySchema),
+    defaultValues: storedData,
+  });
 
   const handleImageUpload = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
