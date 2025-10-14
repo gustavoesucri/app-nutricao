@@ -111,10 +111,11 @@ export default function AnthropometryScreen({ navigation }) {
   ];
 
   return (
-    <View style={styles.container}>
-      <Header title="Avaliação Física" navigation={navigation} />
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <View style={styles.card}>
+  <View style={styles.container}>
+    <Header title="Avaliação Física" navigation={navigation} />
+    <View style={styles.cardWrapper}>
+      <View style={styles.card}>
+        <ScrollView contentContainerStyle={styles.scroll}>
           {sections.map((section) => (
             <View key={section.title}>
               <Text style={styles.sectionTitle}>{section.title}</Text>
@@ -129,22 +130,14 @@ export default function AnthropometryScreen({ navigation }) {
                         <TextInput
                           style={styles.inputSmall}
                           keyboardType="numeric"
-                          editable={name !== "bmi"} // IMC só leitura
+                          editable={name !== "bmi"}
                           value={value}
                           onChangeText={(text) => {
-                            // permite apenas números e vírgula/ponto
                             let formatted = text.replace(/[^0-9.,]/g, "");
-
-                            // substitui ponto por vírgula
                             formatted = formatted.replace(",", ".");
-
-                            // impede mais de uma vírgula
                             const parts = formatted.split(".");
                             if (parts.length > 2) formatted = parts[0] + "." + parts[1];
-
-                            // limita 3 antes e 2 depois da vírgula
                             formatted = formatted.replace(/^(\d{0,3})(\.\d{0,2})?.*$/, "$1$2");
-
                             onChange(formatted);
                           }}
                         />
@@ -156,29 +149,38 @@ export default function AnthropometryScreen({ navigation }) {
               ))}
             </View>
           ))}
+          <View style={styles.orangeButton}>
           <OrangeButton title="Salvar Avaliação" onPress={handleSubmit(onSubmit)} />
-        </View>
-      </ScrollView>
-      <Footer navigation={navigation} />
+          </View>
+        </ScrollView>
+      </View>
     </View>
-  );
+    <Footer navigation={navigation} />
+  </View>
+);
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "orange"
+    backgroundColor: "orange",
   },
 
-  scroll: {
+  cardWrapper: {
+    flex: 1,
     padding: 20,
-    paddingBottom: 80
+    paddingBottom: 80,
   },
 
   card: {
+    flex: 1,
     backgroundColor: "#fff",
     borderRadius: 10,
-    padding: 20
+    padding: 20,
+  },
+
+  scroll: {
+    paddingBottom: 20,
   },
 
   sectionTitle: {
@@ -227,5 +229,8 @@ const styles = StyleSheet.create({
     color: "#333",
     marginLeft: 5
   },
+  orangeButton: {
+    marginTop: 20
+  }
 });
 
