@@ -60,23 +60,32 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <Header title="Início" navigation={navigation} />
 
-      <Text style={styles.title}>🏠 Home</Text>
-      <Text style={styles.subtitle}>Bem-vindo ao app!</Text>
-      <Text style={styles.subtitle}>OBS: Nesta tela deverá ter os botões que levam às outras telas.</Text>
-      <Text style={styles.subtitle}>Exemplo: O botão azul Avaliação Física será um botão grande com imagem/ícone somente. Assim como todos os outros.</Text>
+      <View style={styles.cardWrapper}>
+        <View style={styles.card}>
+          {isScrollable ? (
+            <FlatList
+              ref={(ref) => (flatListRef = ref)}
+              data={loopedButtons}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={renderButton}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.scroll}
+              numColumns={2}
+              columnWrapperStyle={styles.row}
+              onScroll={handleScroll}
+              scrollEventThrottle={16}
+            />
+          ) : (
+            <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-evenly" }}>
+              {buttons.map((b, i) => renderButton({ item: b, index: i }))}
+            </View>
+          )}
+        </View>
+      </View>
 
-      <Button
-        title="Ir para detalhes"
-        onPress={() => navigation.navigate("Details")}
-      />
-
-      <View style={{ height: 12 }} />
-
-      <Button
-        title="Ir para Avaliação Física"
-        onPress={() => navigation.navigate("Anthropometry")}
-      />
+      <Footer navigation={navigation} />
     </View>
   );
 }
