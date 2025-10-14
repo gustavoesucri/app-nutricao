@@ -1,20 +1,21 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet} from "react-native";
 import { Appbar } from 'react-native-paper';
 
 export default function Header({ title, navigation }) {
+
+  const isHome = title === "Início"; // identifica se é a Home
+
   return (
     <View style={styles.container}>
       {/* Botão esquerdo de voltar */}
-      {navigation ? (
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.iconButton}
-        >
-           <Appbar.BackAction onPress={() => navigation.goBack()} />
-        </TouchableOpacity>
-      ) : (
-        <View style={styles.iconPlaceholder} />
-      )}
+      {!isHome && navigation ? (
+  <Appbar.BackAction
+    onPress={() => navigation.goBack()}
+    style={{ zIndex: 1 }} // Joga o botão para frente, para ficar completamente acessível ao toque. O título estava por cima de maneira invisível por ser absolute. Havia outras soluções, optei por esta.
+  />
+) : (
+  <View style={styles.iconPlaceholder} />
+)}
 
       {/* Título central */}
       <Text style={styles.title}>{title}</Text>
@@ -45,6 +46,10 @@ const styles = StyleSheet.create({
     elevation: 3, // sombra no Android
   },
   title: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",
     color: "#000",

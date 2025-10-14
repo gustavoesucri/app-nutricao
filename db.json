@@ -1,0 +1,75 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Test User",
+      "email": "test@example.com",
+      "birthdate": "1990-01-01",
+      "isTrainer": false
+    }
+  ],
+  "anthropometries": [
+    {
+      "id": "1",
+      "userId": 1,
+      "neck": "38.0",
+      "shoulders": "45.0",
+      "chest": "100.0",
+      "armRelaxed": "32.0",
+      "armContracted": "34.0",
+      "forearm": "28.0",
+      "waist": "82.0",
+      "hip": "96.0",
+      "thigh": "56.0",
+      "calf": "36.0",
+      "height": "180.0",
+      "weight": "79.0",
+      "bmi": "24.38",
+      "createdAt": "2025-10-12T10:00:00.000Z"
+    }
+  ],
+  "workouts": [
+    {
+      "id": "1",
+      "title": "Full Body",
+      "difficulty": "medium",
+      "exercises": [
+        "squat",
+        "pushup"
+      ],
+      "durationMinutes": 40,
+      "active": true
+    }
+  ],
+  "meals": [
+    {
+      "id": "1",
+      "userId": 1,
+      "dateTime": "2025-10-12T12:30:00.000Z",
+      "type": "lunch",
+      "calories": 700,
+      "description": "Chicken + rice"
+    }
+  ],
+  "habits": [
+    {
+      "id": "1",
+      "userId": 1,
+      "title": "Drink water",
+      "frequency": "daily",
+      "reminderTime": "08:00",
+      "completedToday": false
+    }
+  ],
+  "assessments": [
+    {
+      "id": "1",
+      "userId": 1,
+      "date": "2025-10-01",
+      "weight": "78.0",
+      "height": "180.0",
+      "waist": "82.0",
+      "notes": "Good progress"
+    }
+  ]
+}
