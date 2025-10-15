@@ -22,7 +22,7 @@ export default function HomeScreen({ navigation }) {
     { icon: "metric", screen: "Anthropometry", imageSize: 0.87 },
     { icon: "workout", screen: "Workout", imageSize: 0.92 },
     { icon: "cart", screen: "Store", imageSize: 0.825, imageOffsetX: -18, paddingLeft: 10 },
-    { icon: "gift", screen: "Daily", imageSize: 1.39 },
+    { icon: "gift", screen: "Diary", imageSize: 1.39 },
   ];
 
   // duplicar os itens várias vezes para scroll infinito

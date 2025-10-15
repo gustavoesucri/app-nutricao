@@ -56,7 +56,7 @@
       "id": "1",
       "userId": 1,
       "title": "Drink water",
-      "frequency": "daily",
+      "frequency": "diary",
       "reminderTime": "08:00",
       "completedToday": false
     }

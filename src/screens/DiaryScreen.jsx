@@ -9,7 +9,7 @@ import {
   setDificuldade,
   setDesejo,
   setImagem,
-} from "../store/dailySlice";
+} from "../store/diarySlice";
 import MoodButton from "../components/MoodButton";
 import OrangeButton from "../components/OrangeButton";
 import Header from "../components/Header";
@@ -17,7 +17,7 @@ import { ScrollView } from "react-native-web";
 import Footer from "../components/Footer";
 
 // ✅ Schema de validação
-const dailySchema = z.object({
+const diarySchema = z.object({
   humor: z.enum(["Ruim", "Bom", "Excelente"], {
     required_error: "Selecione o humor na refeição",
   }),
@@ -34,13 +34,13 @@ const dailySchema = z.object({
   imagem: z.string().optional(),
 });
 
-export default function DailyScreen({ navigation }) {
+export default function DiaryScreen({ navigation }) {
   const dispatch = useDispatch();
   const { humor, dificuldade, desejo, imagem } = useSelector((state) => state.diario);
   const storedData = useSelector((state) => state.anthropometry);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
-    resolver: zodResolver(dailySchema),
+    resolver: zodResolver(diarySchema),
     defaultValues: {
       humor,
       dificuldade,

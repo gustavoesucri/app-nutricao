@@ -7,7 +7,6 @@ export default function Footer({ navigation }) {
     require("../../assets/burguer.png"),
     require("../../assets/cart.png"),
     require("../../assets/gift.png"),
-    require("../../assets/fork-knife.png"),
   ];
 
   const onPressHandlers = [
@@ -15,13 +14,12 @@ export default function Footer({ navigation }) {
     () => navigation.navigate("Anthropometry"),
     () => navigation.navigate("Menu"),
     () => navigation.navigate("Cart"),
-    () => navigation.navigate("Daily"),
-    () => navigation.navigate("Meals"),
+    () => navigation.navigate("Diary"),
   ];
 
-  const imageSizes = [1.2, 1.38, 1.38, 1.3, 1.98, 1,3];
-  const imageOffsetsX = [0, 0, 0, 1, 0, 0];
-  const imageOffsetsY = [0, 3, 0, 0, 0, 0];
+  const imageSizes = [1.2, 1.38, 1.38, 1.3, 1.98];
+  const imageOffsetsX = [0, 0, 0, 1, 0];
+  const imageOffsetsY = [0, 3, 0, 0, 0];
 
   return (
     <View style={styles.container}>

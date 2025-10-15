@@ -7,7 +7,7 @@ const initialState = {
   imagem: null,
 };
 
-const dailySlice = createSlice({
+const diarySlice = createSlice({
   name: "diario",
   initialState,
   reducers: {
@@ -19,5 +19,5 @@ const dailySlice = createSlice({
   },
 });
 
-export const { setHumor, setDificuldade, setDesejo, setImagem, resetDiario } = dailySlice.actions;
-export default dailySlice.reducer;
+export const { setHumor, setDificuldade, setDesejo, setImagem, resetDiario } = diarySlice.actions;
+export default diarySlice.reducer;
