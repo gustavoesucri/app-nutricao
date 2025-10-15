@@ -25,13 +25,13 @@ export default function HomeScreen({ navigation }) {
     { icon: "gift", screen: "Diary", imageSize: 1.39 },
   ];
 
-  // duplicar os itens várias vezes para scroll infinito
+  // duplicar itens para scroll infinito
   const loopedButtons = [...buttons, ...buttons, ...buttons];
 
   let flatListRef;
 
-  const renderButton = ({ item }) => (
-    <View style={styles.homeButton}>
+  const renderButton = ({ item, index }) => (
+    <View key={item.icon + "-" + index} style={styles.homeButton}>
       <HomeButton
         iconSource={icons[item.icon]}
         onPress={() => navigation.navigate(item.screen)}
@@ -66,7 +66,7 @@ export default function HomeScreen({ navigation }) {
             <FlatList
               ref={(ref) => (flatListRef = ref)}
               data={loopedButtons}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(item, index) => item.icon + "-" + index}
               renderItem={renderButton}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.scroll}
@@ -77,7 +77,17 @@ export default function HomeScreen({ navigation }) {
             />
           ) : (
             <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-evenly" }}>
-              {buttons.map((b, i) => renderButton({ item: b, index: i }))}
+              {buttons.map((b, i) => (
+                <View key={b.icon + "-" + i} style={styles.homeButton}>
+                  <HomeButton
+                    iconSource={icons[b.icon]}
+                    onPress={() => navigation.navigate(b.screen)}
+                    imageSize={b.imageSize}
+                    imageOffsetX={b.imageOffsetX}
+                    paddingLeft={b.paddingLeft}
+                  />
+                </View>
+              ))}
             </View>
           )}
         </View>

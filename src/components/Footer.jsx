@@ -13,7 +13,7 @@ export default function Footer({ navigation }) {
     () => navigation.navigate("Home"),
     () => navigation.navigate("Anthropometry"),
     () => navigation.navigate("Menu"),
-    () => navigation.navigate("Cart"),
+    () => navigation.navigate("Store"),
     () => navigation.navigate("Diary"),
   ];
 

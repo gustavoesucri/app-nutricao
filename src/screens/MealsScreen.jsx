@@ -180,12 +180,13 @@ export default function MealsScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Header title="Refeições do Dia" navigation={navigation} />
-      <ScrollView contentContainerStyle={styles.scroll}>
+  <View style={styles.container}>
+    <Header title="Refeições do Dia" navigation={navigation} />
+
+    <ScrollView contentContainerStyle={styles.scroll}>
       <View style={styles.card}>
-        {meals.map((meal) => (  
-            <ScrollView contentContainerStyle={styles.scroll}>
+        {meals.map((meal, mealIndex) => (
+          <View key={meal.name + "-" + mealIndex} style={{ marginBottom: 12 }}>
             <TouchableOpacity
               style={[
                 styles.mealButton,
@@ -213,10 +214,14 @@ export default function MealsScreen({ navigation }) {
                     {selectedOption === opt.id && (
                       <View style={styles.detailCard}>
                         <Text style={styles.detailTitle}>{opt.meal}</Text>
-                        <Text style={styles.detailText}>⏱ Tempo de preparo: {opt.timePrep}</Text>
+                        <Text style={styles.detailText}>
+                          ⏱ Tempo de preparo: {opt.timePrep}
+                        </Text>
                         <Text style={styles.subTitle}>🍽 Ingredientes:</Text>
                         {opt.ingredients.map((ing, i) => (
-                          <Text key={i} style={styles.detailText}>• {ing}</Text>
+                          <Text key={i} style={styles.detailText}>
+                            • {ing}
+                          </Text>
                         ))}
                         <Text style={styles.subTitle}>👨‍🍳 Modo de preparo:</Text>
                         <Text style={styles.detailText}>{opt.mode}</Text>
@@ -226,13 +231,14 @@ export default function MealsScreen({ navigation }) {
                 ))}
               </View>
             )}
-            </ScrollView> 
+          </View>
         ))}
-        </View>
-      </ScrollView>
-      <Footer navigation={navigation} />
-    </View>
-  );
+      </View>
+    </ScrollView>
+
+    <Footer navigation={navigation} />
+  </View>
+);
 }
 
 const styles = StyleSheet.create({
