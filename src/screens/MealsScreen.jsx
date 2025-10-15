@@ -10,7 +10,7 @@ export default function MealsScreen({ navigation }) {
   // Lista de refeições com suas opções e detalhes
   const meals = [
     {
-      name: "Desjejum",
+      name: "Café da manhã",
       time: "08:30 - Café da manhã",
       options: [
         {
@@ -59,6 +59,47 @@ export default function MealsScreen({ navigation }) {
       ],
     },
     {
+      name: "Lanche da Tarde",
+      time: "16:30 - Lanche da tarde",
+      options: [
+        {
+          id: 1,
+          title: "Opção 1",
+          meal: "Iogurte natural com frutas picadas",
+          timePrep: "5 min",
+          ingredients: [
+            "1 copo de iogurte natural",
+            "1/2 banana fatiada",
+            "1 colher de granola",
+          ],
+          mode: "Misture o iogurte com as frutas e finalize com a granola por cima.",
+        },
+        {
+          id: 2,
+          title: "Opção 2",
+          meal: "Pão integral com queijo branco e tomate",
+          timePrep: "5 min",
+          ingredients: [
+            "2 fatias de pão integral",
+            "2 fatias de queijo branco",
+            "2 rodelas de tomate",
+          ],
+          mode: "Monte o sanduíche com pão, queijo e tomate. Sirva fresco.",
+        },
+        {
+          id: 3,
+          title: "Opção 3",
+          meal: "Banana com pasta de amendoim",
+          timePrep: "2 min",
+          ingredients: [
+            "1 banana média",
+            "1 colher de sopa de pasta de amendoim",
+          ],
+          mode: "Corte a banana em rodelas e espalhe a pasta de amendoim por cima.",
+        }
+      ],
+    },    
+    {
       name: "Jantar",
       time: "19:30 - Jantar",
       options: [
@@ -86,6 +127,47 @@ export default function MealsScreen({ navigation }) {
         },
       ],
     },
+    {
+      name: "Ceia",
+      time: "21:00 - Ceia",
+      options: [
+        {
+          id: 1,
+          title: "Opção 1",
+          meal: "Leite morno com aveia",
+          timePrep: "5 min",
+          ingredients: [
+            "1 copo de leite ou bebida vegetal",
+            "2 colheres de sopa de aveia",
+            "1 colher de chá de mel (opcional)",
+          ],
+          mode: "Aqueça o leite, misture a aveia e, se quiser, adicione mel. Sirva morno.",
+        },
+        {
+          id: 2,
+          title: "Opção 2",
+          meal: "Iogurte natural com sementes",
+          timePrep: "3 min",
+          ingredients: [
+            "1 copo de iogurte natural",
+            "1 colher de chá de chia ou linhaça",
+            "1 colher de chá de mel (opcional)",
+          ],
+          mode: "Misture todos os ingredientes em uma tigela e sirva.",
+        },
+        {
+          id: 3,
+          title: "Opção 3",
+          meal: "Chá de camomila com biscoitos integrais",
+          timePrep: "5 min",
+          ingredients: [
+            "1 xícara de chá de camomila",
+            "2 biscoitos integrais",
+          ],
+          mode: "Prepare o chá e sirva junto com os biscoitos.",
+        },
+      ],
+    }
   ];
 
   const handleMealSelect = (mealName) => {
@@ -100,10 +182,10 @@ export default function MealsScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Header title="Refeições do Dia" navigation={navigation} />
-
       <ScrollView contentContainerStyle={styles.scroll}>
-        {meals.map((meal) => (
-          <View key={meal.name} style={styles.card}>
+      <View style={styles.card}>
+        {meals.map((meal) => (  
+            <ScrollView contentContainerStyle={styles.scroll}>
             <TouchableOpacity
               style={[
                 styles.mealButton,
@@ -125,7 +207,7 @@ export default function MealsScreen({ navigation }) {
                       ]}
                       onPress={() => handleOptionSelect(opt.id)}
                     >
-                      <Text style={styles.optionText}>{`${meal.time} - ${opt.title}`}</Text>
+                      <Text>{`${meal.time} - ${opt.title}`}</Text>
                     </TouchableOpacity>
 
                     {selectedOption === opt.id && (
@@ -144,8 +226,9 @@ export default function MealsScreen({ navigation }) {
                 ))}
               </View>
             )}
-          </View>
+            </ScrollView> 
         ))}
+        </View>
       </ScrollView>
       <Footer navigation={navigation} />
     </View>
@@ -187,14 +270,16 @@ const styles = StyleSheet.create({
     optionsContainer: { marginTop: 10 },
     optionButton: {
         backgroundColor: "#EEE",
-        padding: 10,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        marginHorizontal: 5,
         borderRadius: 8,
         marginVertical: 5,
     },
     optionButtonActive: {
         backgroundColor: "#D6F5D6",
     },
-    optionText: { fontSize: 16 },
+    optionText: { fontSize: 14 },
     detailCard: {
         backgroundColor: "#FFF",
         padding: 15,
