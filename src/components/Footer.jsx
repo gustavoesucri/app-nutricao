@@ -14,7 +14,7 @@ export default function Footer({ navigation }) {
     () => navigation.navigate("Anthropometry"),
     () => navigation.navigate("Menu"),
     () => navigation.navigate("Cart"),
-    () => navigation.navigate("Gift"),
+    () => navigation.navigate("Diary"),
   ];
 
   const imageSizes = [1.2, 1.38, 1.38, 1.3, 1.98];
