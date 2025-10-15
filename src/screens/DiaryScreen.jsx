@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, Alert } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, Alert, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,7 +13,6 @@ import {
 import MoodButton from "../components/MoodButton";
 import OrangeButton from "../components/OrangeButton";
 import Header from "../components/Header";
-import { ScrollView } from "react-native-web";
 import Footer from "../components/Footer";
 
 // ✅ Schema de validação

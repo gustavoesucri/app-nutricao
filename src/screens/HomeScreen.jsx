@@ -17,7 +17,7 @@ export default function HomeScreen({ navigation }) {
   const isScrollable = height <= 653;
 
   const buttons = [
-    { icon: "fork-knife", screen: "Menu", imageSize: 0.78 },
+    { icon: "fork-knife", screen: "Meals", imageSize: 0.78 },
     { icon: "sup", screen: "Supplements", imageSize: 0.9 },
     { icon: "metric", screen: "Anthropometry", imageSize: 0.87 },
     { icon: "workout", screen: "Workout", imageSize: 0.92 },
