@@ -31,16 +31,17 @@ export default function HomeScreen({ navigation }) {
   let flatListRef;
 
   const renderButton = ({ item, index }) => (
-    <View key={item.icon + "-" + index} style={styles.homeButton}>
-      <HomeButton
-        iconSource={icons[item.icon]}
-        onPress={() => navigation.navigate(item.screen)}
-        imageSize={item.imageSize}
-        imageOffsetX={item.imageOffsetX}
-        paddingLeft={item.paddingLeft}
-      />
-    </View>
-  );
+  <View key={item.icon + "-" + index} style={[styles.homeButton, { flex: 1 / 2, alignItems: "center" }]}>
+    <HomeButton
+      iconSource={icons[item.icon]}
+      onPress={() => navigation.navigate(item.screen)}
+      imageSize={item.imageSize}
+      imageOffsetX={item.imageOffsetX}
+      paddingLeft={item.paddingLeft}
+    />
+  </View>
+);
+
 
   const handleScroll = ({ nativeEvent }) => {
     const yOffset = nativeEvent.contentOffset.y;
@@ -70,8 +71,8 @@ export default function HomeScreen({ navigation }) {
               renderItem={renderButton}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.scroll}
-              numColumns={2}
-              columnWrapperStyle={styles.row}
+              numColumns={2} // mantém 2 por linha
+              columnWrapperStyle={{ justifyContent: "space-between" }} // espaçamento correto entre colunas
               onScroll={handleScroll}
               scrollEventThrottle={16}
             />
