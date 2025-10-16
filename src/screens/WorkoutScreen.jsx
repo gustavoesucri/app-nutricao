@@ -7,25 +7,26 @@ import PropTypes from "prop-types";
 
 export default function WorkoutScreen({ navigation }) {
   const video = useRef(null);
-  
+
   return (
     <View style={styles.container}>
-      <Header title="Exercícios" navigation={navigation} />
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <View style={styles.card}>
-          <Video
-            ref={video}
-            style={styles.video}
-            source={{
-              uri: "https://www.w3schools.com/html/mov_bbb.mp4", // pode ser link ou arquivo local
-            }}
-            useNativeControls
-            resizeMode={ResizeMode.CONTAIN}
-            isLooping
-          />
-        </View>
-      </ScrollView>
-      <Footer navigation={navigation} />
+        <Header title="Exercícios" navigation={navigation} />
+        <ScrollView contentContainerStyle={styles.scroll}>
+          <View style={styles.card}>
+            <Video
+              ref={video}
+              style={styles.video}
+              source={{
+                uri: "https://www.w3schools.com/html/mov_bbb.mp4", // pode ser link ou arquivo local
+              }}
+              useNativeControls
+              resizeMode={ResizeMode.CONTAIN}
+              isLooping
+            />
+          </View>
+        </ScrollView>
+
+    <Footer navigation={navigation} />
     </View>
   );
 }
@@ -47,5 +48,7 @@ const styles = StyleSheet.create({
 });
 
 WorkoutScreen.propTypes = {
-  navigation: PropTypes.object.isRequired,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
 };

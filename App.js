@@ -11,6 +11,7 @@ import SupplementsScreen from "./src/screens/SupplementsScreen";
 import WorkoutScreen from "./src/screens/WorkoutScreen";
 import StoreScreen from "./src/screens/StoreScreen";
 import MenuScreen from "./src/screens/MenuScreen";
+import LoginScreen from "./src/screens/LoginScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,7 @@ export default function App() {
           <Stack.Screen name="Workout" component={WorkoutScreen} />
           <Stack.Screen name="Store" component={StoreScreen} />
           <Stack.Screen name="Menu" component={MenuScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
