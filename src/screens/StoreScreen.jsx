@@ -5,6 +5,7 @@ import whey from "../../assets/products/whey.png";
 import barrinha from "../../assets/products/barrinha.png";
 import creatina from "../../assets/products/creatina.png";
 import bcaa from "../../assets/products/bcaa.png";
+import PropTypes from "prop-types";
 
 
 export default function StoreScreen({ navigation }) {
@@ -120,3 +121,9 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+
+StoreScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

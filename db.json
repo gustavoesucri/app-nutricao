@@ -26,6 +26,38 @@
       "weight": "79.0",
       "bmi": "24.38",
       "createdAt": "2025-10-12T10:00:00.000Z"
+    },
+    {
+      "id": "aff1",
+      "neck": "333",
+      "shoulders": "333",
+      "chest": "11",
+      "armRelaxed": "11",
+      "armContracted": "111",
+      "forearm": "11",
+      "waist": "11",
+      "hip": "33",
+      "thigh": "333",
+      "calf": "111",
+      "height": "180",
+      "weight": "77",
+      "bmi": "23.77"
+    },
+    {
+      "id": "9870",
+      "neck": "44",
+      "shoulders": "44",
+      "chest": "",
+      "armRelaxed": "44",
+      "armContracted": "",
+      "forearm": "",
+      "waist": "",
+      "hip": "",
+      "thigh": "",
+      "calf": "",
+      "height": "11",
+      "weight": "44",
+      "bmi": "3636.36"
     }
   ],
   "workouts": [

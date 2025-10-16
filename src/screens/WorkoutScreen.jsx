@@ -1,12 +1,12 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { ResizeMode, Video } from "expo-av";
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import PropTypes from "prop-types";
 
 export default function WorkoutScreen({navigation}) {
   const video = useRef(null);
-  const [status, setStatus] = useState({});
 
   return (
     <View style={styles.container}>
@@ -22,7 +22,6 @@ export default function WorkoutScreen({navigation}) {
               useNativeControls
               resizeMode={ResizeMode.CONTAIN}
               isLooping
-              onPlaybackStatusUpdate={(status) => setStatus(() => status)}
             />
           </View>
         </ScrollView>
@@ -48,3 +47,9 @@ const styles = StyleSheet.create({
     elevation: 3,
 },
 });
+
+WorkoutScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

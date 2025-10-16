@@ -1,13 +1,11 @@
 import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { homeIcon, metricIcon, burguerIcon, cartIcon, giftIcon } from "../../assets";
+import PropTypes from "prop-types";
+
 
 export default function Footer({ navigation }) {
-  const icons = [
-    require("../../assets/home.png"),
-    require("../../assets/metric.png"),
-    require("../../assets/burguer.png"),
-    require("../../assets/cart.png"),
-    require("../../assets/gift.png"),
-  ];
+  const icons = [homeIcon, metricIcon, burguerIcon, cartIcon, giftIcon];
+
 
   const onPressHandlers = [
     () => navigation.navigate("Home"),
@@ -69,3 +67,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
+Footer.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

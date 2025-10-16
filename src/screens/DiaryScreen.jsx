@@ -1,9 +1,11 @@
-import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, Alert, ScrollView } from "react-native";
+import { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, Alert, ScrollView, Platform } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod"; // ✅ Import necessário
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as ImagePicker from "expo-image-picker";
+import PropTypes from "prop-types";
 import {
   setHumor,
   setDificuldade,
@@ -15,7 +17,6 @@ import OrangeButton from "../components/OrangeButton";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-// ✅ Schema de validação
 const diarySchema = z.object({
   humor: z.enum(["Ruim", "Bom", "Excelente"], {
     required_error: "Selecione o humor na refeição",
@@ -23,10 +24,7 @@ const diarySchema = z.object({
   dificuldade: z.boolean({
     required_error: "Informe se teve dificuldade na refeição",
   }),
-  Dificuldade: z
-    .string()
-    .min(3, "Descreva brevemente sua dificuldade")
-    .optional(),
+  Dificuldade: z.string().min(3, "Descreva brevemente sua dificuldade").optional(),
   desejo: z.boolean({
     required_error: "Informe se teve desejo por alimentos específicos",
   }),
@@ -36,7 +34,7 @@ const diarySchema = z.object({
 export default function DiaryScreen({ navigation }) {
   const dispatch = useDispatch();
   const { humor, dificuldade, desejo, imagem } = useSelector((state) => state.diario);
-  const storedData = useSelector((state) => state.anthropometry);
+  const [permissionGranted, setPermissionGranted] = useState(Platform.OS === "web");
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(diarySchema),
@@ -49,13 +47,37 @@ export default function DiaryScreen({ navigation }) {
     },
   });
 
+  useEffect(() => {
+    const requestPermission = async () => {
+      if (Platform.OS !== "web") {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        setPermissionGranted(status === "granted");
+      }
+    };
+    requestPermission();
+  }, []);
+
   const handleImageUpload = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      quality: 1,
-    });
-    if (!result.canceled) {
-      dispatch(setImagem(result.assets[0].uri));
+    if (Platform.OS === "web") {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "image/*";
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const uri = URL.createObjectURL(file);
+          dispatch(setImagem(uri));
+        }
+      };
+      input.click();
+    } else {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+      });
+      if (!result.canceled) {
+        dispatch(setImagem(result.assets[0].uri));
+      }
     }
   };
 
@@ -67,7 +89,6 @@ export default function DiaryScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Header title="Diário de Nutrição" navigation={navigation} />
-
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.card}>
           <Text style={styles.title}>Preencha o seu Diário de Nutrição</Text>
@@ -89,8 +110,7 @@ export default function DiaryScreen({ navigation }) {
           </View>
           {errors.dificuldade && <Text style={styles.error}>{errors.dificuldade.message}</Text>}
 
-          {/* Campo texto */}
-          { dificuldade === true && (
+          {dificuldade === true && (
             <View style={styles.fieldContainer}>
               <Controller
                 control={control}
@@ -108,6 +128,7 @@ export default function DiaryScreen({ navigation }) {
               {errors.Dificuldade && <Text style={styles.error}>{errors.Dificuldade.message}</Text>}
             </View>
           )}
+
           {/* Desejo */}
           <Text style={styles.label}>Desejo por alimentos específicos?</Text>
           <View style={styles.row}>
@@ -116,8 +137,7 @@ export default function DiaryScreen({ navigation }) {
           </View>
           {errors.desejo && <Text style={styles.error}>{errors.desejo.message}</Text>}
 
-          {/* Campo texto */}
-          {desejo === true && (  
+          {desejo === true && (
             <View style={styles.fieldContainer}>
               <Controller
                 control={control}
@@ -135,10 +155,17 @@ export default function DiaryScreen({ navigation }) {
               {errors.Dificuldade && <Text style={styles.error}>{errors.Dificuldade.message}</Text>}
             </View>
           )}
+
           {/* Imagem */}
           {imagem && <Image source={{ uri: imagem }} style={styles.image} />}
-          <TouchableOpacity style={styles.uploadBtn} onPress={handleImageUpload}>
-            <Text style={styles.label}>Upload de imagem da refeição</Text>
+          <TouchableOpacity
+            style={[styles.uploadBtn, !permissionGranted && { opacity: 0.5 }]}
+            onPress={handleImageUpload}
+            disabled={!permissionGranted}
+          >
+            <Text style={styles.label}>
+              {permissionGranted ? "Upload de imagem da refeição" : "Permissão necessária para upload"}
+            </Text>
           </TouchableOpacity>
 
           {/* Botão Salvar */}
@@ -150,25 +177,15 @@ export default function DiaryScreen({ navigation }) {
   );
 }
 
+DiaryScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};
+
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-    justifyContent: "left",
-    marginBottom: 10,
-  },
-  image: {
-    width: "100%",
-    height: 200,
-    borderRadius: 10,
-    marginVertical: 10,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "orange",
-  },
-  scrollContent: {
-    padding: 20,
-  },
+  row: { flexDirection: "row", justifyContent: "left", marginBottom: 10 },
+  image: { width: "100%", height: 200, borderRadius: 10, marginVertical: 10 },
+  container: { flex: 1, backgroundColor: "orange" },
+  scrollContent: { padding: 20 },
   card: {
     backgroundColor: "#fff",
     borderRadius: 10,
@@ -179,11 +196,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  title: {
-    fontSize: 22,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
+  title: { fontSize: 22, fontWeight: "bold", marginBottom: 16 },
   fieldContainer: { marginBottom: 12 },
   label: { fontSize: 14, marginBottom: 4, color: "#333" },
   input: {
@@ -195,4 +208,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   error: { color: "red", marginTop: 4 },
+  uploadBtn: {
+    padding: 10,
+    backgroundColor: "#FFDD99",
+    borderRadius: 6,
+    alignItems: "center",
+    marginVertical: 8,
+  },
 });

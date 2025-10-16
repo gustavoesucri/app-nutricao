@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Image } from "react-native";
-import logo from "../../assets/gift.png"; // sua logo (troque o caminho se necessário)
-import OrangeButton from "../components/OrangeButton";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import PropTypes from "prop-types"; 
+
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -23,7 +23,6 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-        <Image source={logo} style={styles.logo} />
 
         <Text style={styles.titulo}>Bem-vindo!</Text>
         <Text style={styles.subtitulo}>Faça login para continuar</Text>
@@ -116,3 +115,9 @@ const styles = StyleSheet.create({
         textDecorationLine: "underline",
     },
 });
+
+LoginScreen.propTypes = {
+    navigation: PropTypes.shape({
+      navigate: PropTypes.func.isRequired,
+    }).isRequired,
+  };

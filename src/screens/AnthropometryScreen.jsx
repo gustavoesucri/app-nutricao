@@ -1,15 +1,19 @@
 import { useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput } from "react-native";
-import { useForm, Controller, useWatch } from "react-hook-form";
+import { View, Text, StyleSheet, ScrollView, TextInput, Alert } from "react-native";
+import { useForm, Controller, useWatch} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useDispatch } from "react-redux";
 import { setAnthropometry } from "../store/anthropometrySlice";
 import Header from "../components/Header";
 import OrangeButton from "../components/OrangeButton";
-import { saveAnthropometryLocal, syncAnthropometryWithServer } from "../api/anthropometryApi";
-import { loadAnthropometryLocal } from "../api/anthropometryApi";
 import Footer from "../components/Footer";
+import PropTypes from "prop-types";
+
+// 🔹 Storage universal e fila
+import { saveAnthropometry, loadAnthropometry, removeAnthropometry } from "../api/storage";
+import { syncAnthropometryWithServer } from "../api/anthropometryApi";
+import { addToQueue } from "../api/syncQueue";
 
 const schema = z.object({
   neck: z.string().optional(),
@@ -29,14 +33,28 @@ const schema = z.object({
 
 export default function AnthropometryScreen({ navigation }) {
   const dispatch = useDispatch();
-  const { control, handleSubmit, setValue, watch } = useForm({
+  const { control, handleSubmit, setValue, reset } = useForm({
     resolver: zodResolver(schema),
-    defaultValues: {},
+    defaultValues: {
+      neck: "",
+      shoulders: "",
+      chest: "",
+      armRelaxed: "",
+      armContracted: "",
+      forearm: "",
+      waist: "",
+      hip: "",
+      thigh: "",
+      calf: "",
+      height: "",
+      weight: "",
+      bmi: "",
+    },
   });
 
   // recalcula IMC quando peso ou altura mudam
-  const height = watch("height");
-  const weight = watch("weight");
+const weight = useWatch({ control, name: "weight" });
+const height = useWatch({ control, name: "height" });
 
   useEffect(() => {
     const h = parseFloat(height?.replace(",", "."));
@@ -49,9 +67,10 @@ export default function AnthropometryScreen({ navigation }) {
     }
   }, [height, weight]);
 
+  // carrega dados locais ao montar a tela
   useEffect(() => {
     (async () => {
-      const saved = await loadAnthropometryLocal();
+      const saved = await loadAnthropometry();
       if (saved) {
         Object.entries(saved).forEach(([key, value]) => setValue(key, value));
       }
@@ -59,19 +78,40 @@ export default function AnthropometryScreen({ navigation }) {
   }, []);
 
   const onSubmit = async (data) => {
-    try {
-      await saveAnthropometryLocal(data);
-      dispatch(setAnthropometry(data));
+    // debugger;
 
+    console.log("===== onSubmit iniciado =====");
+    console.log("Dados do formulário:", data);
+
+    // Atualiza o Redux sempre, antes de salvar local ou server
+    dispatch(setAnthropometry(data));
+    console.log("Redux atualizado com os dados.");
+
+    try {
+      // Tenta sincronizar com o servidor
+      console.log("Tentando enviar para o servidor...");
       const synced = await syncAnthropometryWithServer();
+
       if (synced) {
-        console.log("Dados enviados para servidor com sucesso!");
+        console.log("✅ Dados enviados para o servidor!");
+        Alert.alert("Sucesso", "Dados enviados para o servidor!");
+
+        // Limpa local e form
+        await removeAnthropometry();
+        reset();
       } else {
-        console.log("Sem conexão. Dados mantidos localmente.");
+        console.log("⚠️ Sem conexão. Salvando localmente...");
+        await saveAnthropometry(data);
+        addToQueue(data); // adiciona à fila de sync
+        Alert.alert("Offline", "Sem conexão. Dados salvos localmente.");
+        reset();
       }
     } catch (err) {
-      console.error("Erro ao salvar avaliação:", err);
+      console.error("❌ Erro ao salvar avaliação:", err);
+      Alert.alert("Erro", "Não foi possível salvar os dados.");
     }
+
+    console.log("===== onSubmit finalizado =====");
   };
 
   const sections = [
@@ -111,53 +151,53 @@ export default function AnthropometryScreen({ navigation }) {
   ];
 
   return (
-  <View style={styles.container}>
-    <Header title="Avaliação Física" navigation={navigation} />
-    <View style={styles.cardWrapper}>
-      <View style={styles.card}>
-        <ScrollView contentContainerStyle={styles.scroll}>
-          {sections.map((section) => (
-            <View key={section.title}>
-              <Text style={styles.sectionTitle}>{section.title}</Text>
-              {section.fields.map(({ name, label, unit }) => (
-                <View key={name} style={styles.fieldRow}>
-                  <Text style={styles.label}>{label}</Text>
-                  <View style={styles.inputGroup}>
-                    <Controller
-                      control={control}
-                      name={name}
-                      render={({ field: { onChange, value } }) => (
-                        <TextInput
-                          style={styles.inputSmall}
-                          keyboardType="numeric"
-                          editable={name !== "bmi"}
-                          value={value}
-                          onChangeText={(text) => {
-                            let formatted = text.replace(/[^0-9.,]/g, "");
-                            formatted = formatted.replace(",", ".");
-                            const parts = formatted.split(".");
-                            if (parts.length > 2) formatted = parts[0] + "." + parts[1];
-                            formatted = formatted.replace(/^(\d{0,3})(\.\d{0,2})?.*$/, "$1$2");
-                            onChange(formatted);
-                          }}
-                        />
-                      )}
-                    />
-                    <Text style={styles.unit}>{unit}</Text>
+    <View style={styles.container}>
+      <Header title="Avaliação Física" navigation={navigation} />
+      <View style={styles.cardWrapper}>
+        <View style={styles.card}>
+          <ScrollView contentContainerStyle={styles.scroll}>
+            {sections.map((section) => (
+              <View key={section.title}>
+                <Text style={styles.sectionTitle}>{section.title}</Text>
+                {section.fields.map(({ name, label, unit }) => (
+                  <View key={name} style={styles.fieldRow}>
+                    <Text style={styles.label}>{label}</Text>
+                    <View style={styles.inputGroup}>
+                      <Controller
+                        control={control}
+                        name={name}
+                        render={({ field: { onChange, value } }) => (
+                          <TextInput
+                            style={styles.inputSmall}
+                            keyboardType="numeric"
+                            editable={name !== "bmi"}
+                            value={value ?? ""}
+                            onChangeText={(text) => {
+                              let formatted = text.replace(/[^0-9.,]/g, "");
+                              formatted = formatted.replace(",", ".");
+                              const parts = formatted.split(".");
+                              if (parts.length > 2) formatted = parts[0] + "." + parts[1];
+                              formatted = formatted.replace(/^(\d{0,3})(\.\d{0,2})?.*$/, "$1$2");
+                              onChange(formatted);
+                            }}
+                          />
+                        )}
+                      />
+                      <Text style={styles.unit}>{unit}</Text>
+                    </View>
                   </View>
-                </View>
-              ))}
+                ))}
+              </View>
+            ))}
+            <View style={styles.orangeButton}>
+              <OrangeButton title="Salvar Avaliação" onPress={handleSubmit(onSubmit)} />
             </View>
-          ))}
-          <View style={styles.orangeButton}>
-          <OrangeButton title="Salvar Avaliação" onPress={handleSubmit(onSubmit)} />
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </View>
       </View>
+      <Footer navigation={navigation} />
     </View>
-    <Footer navigation={navigation} />
-  </View>
-);
+  );
 }
 
 const styles = StyleSheet.create({
@@ -234,3 +274,9 @@ const styles = StyleSheet.create({
   }
 });
 
+AnthropometryScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+    goBack: PropTypes.func,
+  }).isRequired,
+};
