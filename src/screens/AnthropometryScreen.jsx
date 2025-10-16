@@ -78,7 +78,7 @@ const height = useWatch({ control, name: "height" });
   }, []);
 
   const onSubmit = async (data) => {
-    // debugger;
+    debugger;
 
     console.log("===== onSubmit iniciado =====");
     console.log("Dados do formulário:", data);
@@ -98,7 +98,7 @@ const height = useWatch({ control, name: "height" });
 
         // Limpa local e form
         await removeAnthropometry();
-        reset();
+        // reset();
       } else {
         console.log("⚠️ Sem conexão. Salvando localmente...");
         await saveAnthropometry(data);
