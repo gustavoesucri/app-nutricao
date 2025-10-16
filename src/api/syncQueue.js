@@ -1,37 +1,62 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import Storage, { KEYS } from "./storage";
+import { createAnthropometry } from "./anthropometryApi";
 import NetInfo from "@react-native-community/netinfo";
-import { postAnthropometry } from "./api";
 
-const QUEUE_KEY = "@syncQueue";
-
-// Adiciona item à fila
+// 🔹 Adiciona item à fila
 export const addToQueue = async (item) => {
-  const queue = JSON.parse(await AsyncStorage.getItem(QUEUE_KEY)) || [];
-  queue.push(item);
-  await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
-  trySync();
-};
-
-// Tenta sincronizar a fila se tiver internet
-export const trySync = async () => {
-  const state = await NetInfo.fetch();
-  if (!state.isConnected) return;
-
-  const queue = JSON.parse(await AsyncStorage.getItem(QUEUE_KEY)) || [];
-  if (queue.length === 0) return;
-
-  const failed = [];
-  for (const item of queue) {
-    try {
-      await postAnthropometry(item);
-    } catch (e) {
-      failed.push(item);
-    }
+  try {
+    const queueJson = await Storage.getItem(KEYS.QUEUE);
+    const queue = queueJson ? JSON.parse(queueJson) : [];
+    queue.push(item);
+    await Storage.setItem(KEYS.QUEUE, JSON.stringify(queue));
+    trySync();
+  } catch (err) {
+    console.error("Erro ao adicionar à fila:", err);
   }
-  await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(failed));
 };
 
-// Carrega fila (opcional, para debug ou histórico)
+// 🔹 Tenta sincronizar a fila se houver internet
+export const trySync = async () => {
+  try {
+    const state = await NetInfo.fetch();
+    if (!state.isConnected) return;
+
+    const queueJson = await Storage.getItem(KEYS.QUEUE);
+    const queue = queueJson ? JSON.parse(queueJson) : [];
+    if (queue.length === 0) return;
+
+    const failed = [];
+    for (const item of queue) {
+      try {
+        await createAnthropometry(item); // usa função universal da API
+      } catch (err) {
+        failed.push(item);
+      }
+    }
+    await Storage.setItem(KEYS.QUEUE, JSON.stringify(failed));
+    if (failed.length === 0) console.log("Fila sincronizada com sucesso!");
+    else console.warn(`${failed.length} item(s) não foram sincronizados.`);
+  } catch (err) {
+    console.error("Erro ao sincronizar fila:", err);
+  }
+};
+
+// 🔹 Carrega fila (opcional, para debug ou histórico)
 export const loadQueue = async () => {
-  return JSON.parse(await AsyncStorage.getItem(QUEUE_KEY)) || [];
+  try {
+    const queueJson = await Storage.getItem(KEYS.QUEUE);
+    return queueJson ? JSON.parse(queueJson) : [];
+  } catch (err) {
+    console.error("Erro ao carregar fila:", err);
+    return [];
+  }
+};
+
+// 🔹 Limpa a fila
+export const clearQueue = async () => {
+  try {
+    await Storage.removeItem(KEYS.QUEUE);
+  } catch (err) {
+    console.error("Erro ao limpar fila:", err);
+  }
 };
