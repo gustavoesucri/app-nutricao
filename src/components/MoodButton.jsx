@@ -1,5 +1,5 @@
-import React from "react";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import PropTypes from "prop-types";
 
 export default function MoodButton({ label, active, onPress, color }) {
   return (
@@ -30,3 +30,10 @@ const styles = StyleSheet.create({
     color: "#333",
   },
 });
+
+MoodButton.propTypes = {
+  label: PropTypes.string.isRequired,
+  active: PropTypes.bool,
+  onPress: PropTypes.func.isRequired,
+  color: PropTypes.string,
+};

@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet} from "react-native";
 import { Appbar } from 'react-native-paper';
+import PropTypes from "prop-types";
 
 export default function Header({ title, navigation }) {
 
@@ -61,3 +62,10 @@ const styles = StyleSheet.create({
     width: 24, // mantém o espaço se não houver botão de voltar
   },
 });
+
+Header.propTypes = {
+  title: PropTypes.string.isRequired,
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+  }),
+};

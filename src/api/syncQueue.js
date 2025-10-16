@@ -30,6 +30,7 @@ export const trySync = async () => {
       try {
         await createAnthropometry(item); // usa função universal da API
       } catch (err) {
+        console.error("Falha ao enviar item:", err);
         failed.push(item);
       }
     }

@@ -1,9 +1,23 @@
 import { TouchableOpacity, Image, StyleSheet } from "react-native";
+import PropTypes from "prop-types";
 
-const HomeButton = ({ iconSource, onPress, imageSize = 0.8, imageOffsetX = 0, imageOffsetY = 0, paddingLeft, paddingRight, paddingTop, paddingBottom }) => {
+const HomeButton = ({
+  iconSource,
+  onPress,
+  imageSize = 0.8,
+  imageOffsetX = 0,
+  imageOffsetY = 0,
+  paddingLeft = 0,
+  paddingRight = 0,
+  paddingTop = 0,
+  paddingBottom = 0,
+}) => {
   return (
     <TouchableOpacity
-      style={[styles.button, { paddingLeft, paddingRight, paddingTop, paddingBottom }]}
+      style={[
+        styles.button,
+        { paddingLeft, paddingRight, paddingTop, paddingBottom },
+      ]}
       onPress={onPress}
     >
       <Image
@@ -18,6 +32,19 @@ const HomeButton = ({ iconSource, onPress, imageSize = 0.8, imageOffsetX = 0, im
       />
     </TouchableOpacity>
   );
+};
+
+HomeButton.propTypes = {
+  iconSource: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
+    .isRequired,
+  onPress: PropTypes.func.isRequired,
+  imageSize: PropTypes.number,
+  imageOffsetX: PropTypes.number,
+  imageOffsetY: PropTypes.number,
+  paddingLeft: PropTypes.number,
+  paddingRight: PropTypes.number,
+  paddingTop: PropTypes.number,
+  paddingBottom: PropTypes.number,
 };
 
 const styles = StyleSheet.create({

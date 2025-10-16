@@ -1,4 +1,5 @@
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import PropTypes from "prop-types";
 
 const OrangeButton = ({ title, onPress }) => {
   return (
@@ -31,3 +32,8 @@ const styles = StyleSheet.create({
 });
 
 export default OrangeButton;
+
+OrangeButton.propTypes = {
+  title: PropTypes.string.isRequired,
+  onPress: PropTypes.func.isRequired,
+};

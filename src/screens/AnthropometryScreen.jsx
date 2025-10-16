@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, TextInput, Alert } from "react-native";
-import { useForm, Controller, useWatch } from "react-hook-form";
+import { useForm, Controller, useWatch} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useDispatch } from "react-redux";
@@ -8,6 +8,7 @@ import { setAnthropometry } from "../store/anthropometrySlice";
 import Header from "../components/Header";
 import OrangeButton from "../components/OrangeButton";
 import Footer from "../components/Footer";
+import PropTypes from "prop-types";
 
 // 🔹 Storage universal e fila
 import { saveAnthropometry, loadAnthropometry, removeAnthropometry } from "../api/storage";
@@ -32,7 +33,7 @@ const schema = z.object({
 
 export default function AnthropometryScreen({ navigation }) {
   const dispatch = useDispatch();
-  const { control, handleSubmit, setValue, watch, reset } = useForm({
+  const { control, handleSubmit, setValue, reset } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       neck: "",
@@ -52,8 +53,8 @@ export default function AnthropometryScreen({ navigation }) {
   });
 
   // recalcula IMC quando peso ou altura mudam
-  const height = watch("height");
-  const weight = watch("weight");
+const weight = useWatch({ control, name: "weight" });
+const height = useWatch({ control, name: "height" });
 
   useEffect(() => {
     const h = parseFloat(height?.replace(",", "."));
@@ -77,7 +78,7 @@ export default function AnthropometryScreen({ navigation }) {
   }, []);
 
   const onSubmit = async (data) => {
-    debugger; // pausa aqui quando clicar no botão
+    // debugger;
 
     console.log("===== onSubmit iniciado =====");
     console.log("Dados do formulário:", data);
@@ -273,3 +274,9 @@ const styles = StyleSheet.create({
   }
 });
 
+AnthropometryScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+    goBack: PropTypes.func,
+  }).isRequired,
+};

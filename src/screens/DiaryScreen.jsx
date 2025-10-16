@@ -1,9 +1,8 @@
-import React from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput, Alert, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod"; // ✅ Import necessário
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   setHumor,
   setDificuldade,
@@ -14,6 +13,10 @@ import MoodButton from "../components/MoodButton";
 import OrangeButton from "../components/OrangeButton";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import PropTypes from "prop-types";
+import * as ImagePicker from "expo-image-picker";
+import { Platform } from "react-native";
+
 
 // ✅ Schema de validação
 const diarySchema = z.object({
@@ -36,7 +39,7 @@ const diarySchema = z.object({
 export default function DiaryScreen({ navigation }) {
   const dispatch = useDispatch();
   const { humor, dificuldade, desejo, imagem } = useSelector((state) => state.diario);
-  const storedData = useSelector((state) => state.anthropometry);
+  // const storedData = useSelector((state) => state.anthropometry);
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(diarySchema),
@@ -50,6 +53,21 @@ export default function DiaryScreen({ navigation }) {
   });
 
   const handleImageUpload = async () => {
+  if (Platform.OS === "web") {
+    // Web: usar input HTML
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const uri = URL.createObjectURL(file);
+        dispatch(setImagem(uri));
+      }
+    };
+    input.click();
+  } else {
+    // Mobile: usar expo-image-picker
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
@@ -57,7 +75,8 @@ export default function DiaryScreen({ navigation }) {
     if (!result.canceled) {
       dispatch(setImagem(result.assets[0].uri));
     }
-  };
+  }
+};
 
   const onSubmit = (data) => {
     console.log("Dados validados:", data);
@@ -196,3 +215,7 @@ const styles = StyleSheet.create({
   },
   error: { color: "red", marginTop: 4 },
 });
+
+DiaryScreen.propTypes = {
+  navigation: PropTypes.object.isRequired,
+};

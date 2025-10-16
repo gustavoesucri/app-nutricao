@@ -1,6 +1,6 @@
 import { Platform, Alert } from "react-native";
 import axios from "axios";
-import Storage, { KEYS, saveAnthropometry, loadAnthropometry, removeAnthropometry } from "./storage";
+import {saveAnthropometry, loadAnthropometry, removeAnthropometry } from "./storage";
 
 // Define baseURL de acordo com a plataforma
 const baseURL = Platform.select({

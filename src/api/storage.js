@@ -1,4 +1,5 @@
 import { Platform } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // 🔹 Storage universal: localStorage no web, AsyncStorage no mobile
 const Storage = Platform.select({
@@ -14,7 +15,7 @@ const Storage = Platform.select({
       localStorage.removeItem(key);
     },
   },
-  default: require("@react-native-async-storage/async-storage").default, // android / ios
+  default: AsyncStorage, // android / ios
 });
 
 export default Storage;
