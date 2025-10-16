@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import PropTypes from "prop-types";
 
 export default function MealsScreen({ navigation }) {
   const [selectedMeal, setSelectedMeal] = useState(null);
@@ -298,3 +299,9 @@ const styles = StyleSheet.create({
     detailText: { fontSize: 14, marginBottom: 4 },
     subTitle: { marginTop: 8, fontWeight: "bold", color: "#444" },
 });
+
+MealsScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

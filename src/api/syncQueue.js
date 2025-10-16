@@ -1,6 +1,6 @@
 import Storage, { KEYS } from "./storage";
 import { createAnthropometry } from "./anthropometryApi";
-import NetInfo from "@react-native-community/netinfo";
+import { NetworkInfo } from 'react-native-reachability'; // Importa a biblioteca de rede
 
 // 🔹 Adiciona item à fila
 export const addToQueue = async (item) => {
@@ -18,8 +18,9 @@ export const addToQueue = async (item) => {
 // 🔹 Tenta sincronizar a fila se houver internet
 export const trySync = async () => {
   try {
-    const state = await NetInfo.fetch();
-    if (!state.isConnected) return;
+    // Usando NetworkInfo para verificar se há conexão com a internet
+    const isConnected = await NetworkInfo.isConnected();
+    if (!isConnected) return;
 
     const queueJson = await Storage.getItem(KEYS.QUEUE);
     const queue = queueJson ? JSON.parse(queueJson) : [];

@@ -1,5 +1,8 @@
-export { default as homeIcon } from "./home.png";
+export { default as forkKnifeIcon } from "./fork-knife.png";
+export { default as supIcon } from "./sup.png";
 export { default as metricIcon } from "./metric.png";
-export { default as burguerIcon } from "./burguer.png";
+export { default as workoutIcon } from "./workout.png";
 export { default as cartIcon } from "./cart.png";
 export { default as giftIcon } from "./gift.png";
+export { default as homeIcon } from "./home.png";
+export { default as burguerIcon } from "./burguer.png";

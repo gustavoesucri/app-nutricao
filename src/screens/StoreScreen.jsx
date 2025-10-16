@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, FlatList, Image } from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import imagem1 from "../../assets/gift.png";
+import PropTypes from "prop-types";
 
-
-export default function StoreScreen({navigation}) {
+export default function StoreScreen({ navigation }) {
   const produtos = [
     {
       id: "1",
@@ -30,7 +30,7 @@ export default function StoreScreen({navigation}) {
   ];
 
   const renderItem = ({ item }) => (
-    <View style={styles.card}>  
+    <View style={styles.card}>
       <Image source={item.imagem} style={styles.imagem} />
       <Text style={styles.nome}>{item.nome}</Text>
       <Text style={styles.descricao}>{item.descricao}</Text>
@@ -40,25 +40,22 @@ export default function StoreScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-        <Header title="Loje" navigation={navigation} />
-        <FlatList
-          data={produtos}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          numColumns={3} 
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 30 }}
-        />
-        <Footer navigation={navigation} />
+      <Header title="Loja" navigation={navigation} />
+      <FlatList
+        data={produtos}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        numColumns={3}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 30 }}
+      />
+      <Footer navigation={navigation} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "orange" },
-  text: { fontSize: 22 },
-  scroll: { padding: 20 },
-
   card: {
     backgroundColor: "#fff",
     borderRadius: 10,
@@ -68,7 +65,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 3,
-},
+  },
   imagem: {
     width: "100%",
     height: 180,
@@ -92,3 +89,9 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 });
+
+StoreScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};

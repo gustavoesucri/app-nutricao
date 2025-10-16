@@ -2,14 +2,25 @@ import { View, StyleSheet, FlatList, useWindowDimensions } from "react-native";
 import Header from "../components/Header";
 import HomeButton from "../components/HomeButton";
 import Footer from "../components/Footer";
+import PropTypes from "prop-types";
+
+// ✅ Importando ícones via ESM
+import {
+  forkKnifeIcon,
+  supIcon,
+  metricIcon,
+  workoutIcon,
+  cartIcon,
+  giftIcon,
+} from "../../assets";
 
 const icons = {
-  "fork-knife": require("../../assets/fork-knife.png"),
-  sup: require("../../assets/sup.png"),
-  metric: require("../../assets/metric.png"),
-  workout: require("../../assets/workout.png"),
-  cart: require("../../assets/cart.png"),
-  gift: require("../../assets/gift.png"),
+  "fork-knife": forkKnifeIcon,
+  sup: supIcon,
+  metric: metricIcon,
+  workout: workoutIcon,
+  cart: cartIcon,
+  gift: giftIcon,
 };
 
 export default function HomeScreen({ navigation }) {
@@ -25,23 +36,21 @@ export default function HomeScreen({ navigation }) {
     { icon: "gift", screen: "Diary", imageSize: 1.39 },
   ];
 
-  // duplicar itens para scroll infinito
   const loopedButtons = [...buttons, ...buttons, ...buttons];
 
   let flatListRef;
 
   const renderButton = ({ item, index }) => (
-  <View key={item.icon + "-" + index} style={[styles.homeButton, { flex: 1 / 2, alignItems: "center" }]}>
-    <HomeButton
-      iconSource={icons[item.icon]}
-      onPress={() => navigation.navigate(item.screen)}
-      imageSize={item.imageSize}
-      imageOffsetX={item.imageOffsetX}
-      paddingLeft={item.paddingLeft}
-    />
-  </View>
-);
-
+    <View key={item.icon + "-" + index} style={[styles.homeButton, { flex: 1 / 2, alignItems: "center" }]}>
+      <HomeButton
+        iconSource={icons[item.icon]}
+        onPress={() => navigation.navigate(item.screen)}
+        imageSize={item.imageSize}
+        imageOffsetX={item.imageOffsetX}
+        paddingLeft={item.paddingLeft}
+      />
+    </View>
+  );
 
   const handleScroll = ({ nativeEvent }) => {
     const yOffset = nativeEvent.contentOffset.y;
@@ -71,7 +80,7 @@ export default function HomeScreen({ navigation }) {
               renderItem={renderButton}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.scroll}
-              numColumns={2} // mantém 2 por linha
+              numColumns={2}
               columnWrapperStyle={{ justifyContent: "space-evenly" }}
               onScroll={handleScroll}
               scrollEventThrottle={16}
@@ -110,6 +119,11 @@ const styles = StyleSheet.create({
     maxHeight: 460,
   },
   scroll: { paddingBottom: 40, justifyContent: "center" },
-  row: { justifyContent: "space-evenly" },
   homeButton: { marginBottom: 16 },
 });
+
+HomeScreen.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }).isRequired,
+};
