@@ -23,7 +23,7 @@ export default function Header({ title, navigation }) {
       {/* Botão direito com ícone de presente usando Paper */}
       <Appbar.Action
         icon="gift" // Usando o ícone de presente do Paper
-        onPress={() => alert("clicou no ícone de presente")}
+        onPress={() => navigation.navigate("Login")}
       />
     </View>
   );

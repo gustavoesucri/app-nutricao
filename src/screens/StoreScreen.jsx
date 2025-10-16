@@ -1,94 +1,122 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import imagem1 from "../../assets/gift.png";
+import whey from "../../assets/products/whey.png";
+import barrinha from "../../assets/products/barrinha.png";
+import creatina from "../../assets/products/creatina.png";
+import bcaa from "../../assets/products/bcaa.png";
 
 
-export default function StoreScreen({navigation}) {
+export default function StoreScreen({ navigation }) {
   const produtos = [
     {
       id: "1",
       nome: "Whey Protein",
       descricao: "Proteína concentrada para ganho de massa muscular.",
-      preco: 129.90,
-      imagem: imagem1,
+      preco: 129.9,
+      imagem: whey,
     },
     {
       id: "2",
       nome: "Creatina",
       descricao: "Suplemento para força e desempenho nos treinos.",
-      preco: 89.90,
-      imagem: imagem1,
+      preco: 89.9,
+      imagem: creatina,
     },
     {
       id: "3",
       nome: "Barrinha de Proteína",
       descricao: "Snack saudável e rico em proteínas.",
-      preco: 8.50,
-      imagem: imagem1,
+      preco: 8.5,
+      imagem: barrinha,
+    },
+    {
+      id: "4",
+      nome: "BCAA",
+      descricao: "Aminoácidos essenciais para recuperação muscular.",
+      preco: 59.9,
+      imagem: bcaa,
     },
   ];
 
-  const renderItem = ({ item }) => (
-    <View style={styles.card}>  
-      <Image source={item.imagem} style={styles.imagem} />
-      <Text style={styles.nome}>{item.nome}</Text>
-      <Text style={styles.descricao}>{item.descricao}</Text>
-      <Text style={styles.preco}>R$ {item.preco.toFixed(2)}</Text>
-    </View>
-  );
-
   return (
     <View style={styles.container}>
-        <Header title="Loje" navigation={navigation} />
-        <FlatList
-          data={produtos}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          numColumns={3} 
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 30 }}
-        />
-        <Footer navigation={navigation} />
+      <Header title="Loja" navigation={navigation} />
+
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <View style={styles.card}>
+          <Text style={styles.titulo}>Produtos</Text>
+
+          {/* Container com imagens lado a lado e quebra de linha */}
+          <View style={styles.produtosContainer}>
+            {produtos.map((item) => (
+              <View key={item.id} style={styles.item}>
+                <Image source={item.imagem} style={styles.imagem} />
+                <Text style={styles.nome}>{item.nome}</Text>
+                <Text style={styles.descricao}>{item.descricao}</Text>
+                <Text style={styles.preco}>R$ {item.preco.toFixed(2)}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+      </ScrollView>
+
+      <Footer navigation={navigation} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "orange" },
-  text: { fontSize: 22 },
-  scroll: { padding: 20 },
-
+  container: {
+    flex: 1,
+    backgroundColor: "orange",
+  },
+  scroll: {
+    padding: 20,
+  },
   card: {
     backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 20,
+    borderRadius: 12,
+    padding: 16,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-},
-  imagem: {
-    width: "100%",
-    height: 180,
-    borderRadius: 10,
-    marginBottom: 10,
   },
-  nome: {
-    fontSize: 18,
+  titulo: {
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 4,
+    marginBottom: 12,
   },
-  descricao: {
-    fontSize: 14,
-    color: "#555",
+  produtosContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap", // 👉 faz quebrar linha quando não couber
+    justifyContent: "space-between",
+  },
+  item: {
+    width: "47%", // duas colunas por linha com espaçamento
+    backgroundColor: "#f9f9f9",
+    borderRadius: 10,
+    marginBottom: 16,
+    alignItems: "center",
+    padding: 10,
+  },
+  imagem: {
+    width: 120,
+    height: 120,
+    borderRadius: 10,
+    resizeMode: "contain",
     marginBottom: 8,
   },
-  preco: {
+  nome: {
     fontSize: 16,
     fontWeight: "bold",
+    textAlign: "center",
+  },
+  preco: {
+    fontSize: 15,
     color: "#2e7d32",
-    marginBottom: 12,
+    fontWeight: "600",
   },
 });
