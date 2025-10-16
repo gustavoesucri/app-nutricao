@@ -72,7 +72,7 @@ export default function HomeScreen({ navigation }) {
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.scroll}
               numColumns={2} // mantém 2 por linha
-              columnWrapperStyle={{ justifyContent: "space-between" }} // espaçamento correto entre colunas
+              columnWrapperStyle={{ justifyContent: "space-evenly" }}
               onScroll={handleScroll}
               scrollEventThrottle={16}
             />
