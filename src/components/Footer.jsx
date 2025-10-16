@@ -10,7 +10,7 @@ export default function Footer({ navigation }) {
   const onPressHandlers = [
     () => navigation.navigate("Home"),
     () => navigation.navigate("Anthropometry"),
-    () => navigation.navigate("Menu"),
+    () => navigation.navigate("Home"),
     () => navigation.navigate("Store"),
     () => navigation.navigate("Diary"),
   ];
