@@ -10,23 +10,25 @@ export default function WorkoutScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-        <Header title="Exercícios" navigation={navigation} />
-        <ScrollView contentContainerStyle={styles.scroll}>
-          <View style={styles.card}>
+      <Header title="Exercícios" navigation={navigation} />
+      <ScrollView contentContainerStyle={styles.scroll}>
+        <View style={styles.card}>
+          <View style={styles.videoContainer}>
             <Video
               ref={video}
               style={styles.video}
               source={{
-                uri: "https://www.w3schools.com/html/mov_bbb.mp4", // pode ser link ou arquivo local
+                uri: "https://www.w3schools.com/html/mov_bbb.mp4",
               }}
               useNativeControls
               resizeMode={ResizeMode.CONTAIN}
               isLooping
             />
           </View>
-        </ScrollView>
+        </View>
+      </ScrollView>
 
-    <Footer navigation={navigation} />
+      <Footer navigation={navigation} />
     </View>
   );
 }
@@ -45,6 +47,17 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
+  videoContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  video: {
+    width: 300,
+    height: 250,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+  },
+
 });
 
 WorkoutScreen.propTypes = {
@@ -52,3 +65,4 @@ WorkoutScreen.propTypes = {
     navigate: PropTypes.func.isRequired,
   }).isRequired,
 };
+
