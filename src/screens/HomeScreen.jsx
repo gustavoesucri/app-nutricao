@@ -11,7 +11,7 @@ import {
   metricIcon,
   workoutIcon,
   cartIcon,
-  giftIcon,
+  diaryIcon,
 } from "../../assets";
 
 const icons = {
@@ -20,7 +20,7 @@ const icons = {
   metric: metricIcon,
   workout: workoutIcon,
   cart: cartIcon,
-  gift: giftIcon,
+  diary: diaryIcon,
 };
 
 export default function HomeScreen({ navigation }) {
@@ -33,7 +33,7 @@ export default function HomeScreen({ navigation }) {
     { icon: "metric", screen: "Anthropometry", imageSize: 0.87 },
     { icon: "workout", screen: "Workout", imageSize: 0.92 },
     { icon: "cart", screen: "Store", imageSize: 0.825, imageOffsetX: -18, paddingLeft: 10 },
-    { icon: "gift", screen: "Diary", imageSize: 1.39 },
+    { icon: "diary", screen: "Diary", imageSize: 1, imageOffsetX: 0, imageOffsetY: 10, }, // Não está aceitando imageOffsetY nesta imagem. Talvez os outros também.
   ];
 
   const loopedButtons = [...buttons, ...buttons, ...buttons];

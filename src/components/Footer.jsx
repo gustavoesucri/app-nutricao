@@ -1,10 +1,10 @@
 import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
-import { homeIcon, metricIcon, burguerIcon, cartIcon, giftIcon } from "../../assets";
+import { homeIcon, metricIcon, burguerIcon, cartIcon, diaryIcon } from "../../assets";
 import PropTypes from "prop-types";
 
 
 export default function Footer({ navigation }) {
-  const icons = [homeIcon, metricIcon, burguerIcon, cartIcon, giftIcon];
+  const icons = [homeIcon, metricIcon, burguerIcon, cartIcon, diaryIcon];
 
 
   const onPressHandlers = [
@@ -15,9 +15,9 @@ export default function Footer({ navigation }) {
     () => navigation.navigate("Diary"),
   ];
 
-  const imageSizes = [1.2, 1.38, 1.38, 1.3, 1.98];
-  const imageOffsetsX = [0, 0, 0, 1, 0];
-  const imageOffsetsY = [0, 3, 0, 0, 0];
+  const imageSizes = [1.2, 1.38, 1.38, 1.3, 1.4];
+  const imageOffsetsX = [0, 0, 0, 3, -2];
+  const imageOffsetsY = [0, 3, 0, 0, 4];
 
   return (
     <View style={styles.container}>
