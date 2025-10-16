@@ -1,16 +1,50 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
+import { ResizeMode, Video } from "expo-av";
+import { useRef, useState } from "react";
 
 export default function WorkoutScreen({navigation}) {
+  const video = useRef(null);
+  const [status, setStatus] = useState({});
+
   return (
     <View style={styles.container}>
         <Header title="Exercícios" navigation={navigation} />
-      <Text style={styles.text}>🏋️ Workout Screen</Text>
+        <ScrollView contentContainerStyle={styles.scroll}>
+          <View style={styles.card}>
+            <Video
+              ref={video}
+              style={styles.video}
+              source={{
+                uri: "https://www.w3schools.com/html/mov_bbb.mp4", // pode ser link ou arquivo local
+              }}
+              useNativeControls
+              resizeMode={ResizeMode.CONTAIN}
+              isLooping
+              onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+            />
+          </View>
+        </ScrollView>
+
+    <Footer navigation={navigation} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center", justifyContent: "center" },
+  video: { width: "100%", height: 250, borderRadius: 10, backgroundColor: "#fff", alignItems: "center"},
+  container: { flex: 1, backgroundColor: "orange" },
   text: { fontSize: 22 },
+  scroll: { padding: 20 },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 4,
+    elevation: 3,
+},
 });
