@@ -78,7 +78,7 @@ const height = useWatch({ control, name: "height" });
   }, []);
 
   const onSubmit = async (data) => {
-    debugger;
+    // debugger;
 
     console.log("===== onSubmit iniciado =====");
     console.log("Dados do formulário:", data);
